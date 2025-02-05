@@ -1,3 +1,6 @@
+server:
+  port: 6342
+
 spring:
   datasource:
     url: jdbc:postgresql://192.168.1.30:5432/postgres
@@ -14,8 +17,7 @@ spring:
 
 
 mybatis:
-  type-aliases-package: com.example.*
+  type-aliases-package: com.example.demo.vo
   configuration:
     map-underscore-to-camel-case: true
-  mapper-locations:
-    - classpath:com.example.mapper/*.xml
+  mapper-locations: classpath*:mapper/**/*.xml
