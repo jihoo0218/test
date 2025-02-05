@@ -13,4 +13,8 @@
         INSERT INTO enroll_test.user_info (id, password, name, create_at)
         VALUES (#{id}, #{password}, #{name}, CURRENT_TIMESTAMP)
     </insert>
+
+    <select id="findAccountInfo" parameterType="com.example.demo.form.LoginForm">
+        SELECT id, password, name FROM enroll_test.user_info WHERE id = #{id}
+    </select>
 </mapper>
