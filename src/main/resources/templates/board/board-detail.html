@@ -11,84 +11,172 @@
     .title-wrapper {
         margin-bottom: 30px;
     }
-    .write-info-wrapper label{
+
+    .write-info-wrapper label {
         font-weight: bolder;
         margin-right: 5px;
     }
-    .write-info-wrapper span{
+
+    .write-info-wrapper span {
         margin-left: 20px;
     }
 </style>
 <head>
     <meta charset="UTF-8">
     <title>Title</title>
-    <script src="https://code.jquery.com/jquery-3.7.1.js" integrity="sha256-eKhayi8LEQwp4NKxN+CfCh+3qOVUtJn3QNZ0TciWLP4=" crossorigin="anonymous"></script>
+    <script src="https://code.jquery.com/jquery-3.7.1.js"
+            integrity="sha256-eKhayi8LEQwp4NKxN+CfCh+3qOVUtJn3QNZ0TciWLP4=" crossorigin="anonymous"></script>
 </head>
 <body>
-    <div class="container">
-        <h1>게시글 상세 페이지</h1>
-        <form action="/boards" method="post" th:object="${boardDetail}">
-            <div class="write-info-wrapper">
-                <label>작성자</label>
-                <span th:text="*{createAccountId}">작성자 아이디</span>
-                <br>
-                <br>
-                <label>작성 날짜</label>
-                <span th:text="*{createdAt}">작성 날짜</span>
-            </div>
+<div class="container">
+    <h1>게시글 상세 페이지</h1>
+    <form action="/boards" method="post" th:object="${boardDetail}">
+        <div class="write-info-wrapper">
+            <label>작성자</label>
+            <span th:text="*{createAccountId}">작성자 아이디</span>
+            <br>
+            <br>
+            <label>작성 날짜</label>
+            <span th:text="*{createdAt}">작성 날짜</span>
+        </div>
 
-            <div class="title-wrapper">
-                <h4>
-                    <label for="title">게시글 제목</label>
-                </h4>
-                <input type="hidden" name="idx" id="idx" readonly th:field="*{idx}">
-                <input type="text" name="title" id="title" readonly th:field="*{title}">
-            </div>
-            <div class="contents-wrapper">
-                <h4>
-                    <label for="contents">게시글 내용</label>
-                </h4>
-                <textarea name="contents" id="contents" cols="30" rows="10" readonly th:field="*{contents}"></textarea>
-            </div>
-            <th:block th:if="${session.loginId != null && session.loginId == boardDetail.createAccountId}">
-                <div class="btn-wrapper">
+        <div class="title-wrapper">
+            <h4>
+                <label for="title">게시글 제목</label>
+            </h4>
+            <input type="hidden" name="idx" id="idx" readonly th:field="*{idx}">
+            <input type="text" name="title" id="title" readonly th:field="*{title}">
+        </div>
+        <div class="contents-wrapper">
+            <h4>
+                <label for="contents">게시글 내용</label>
+            </h4>
+            <textarea name="contents" id="contents" cols="30" rows="10" readonly th:field="*{contents}"></textarea>
+        </div>
+        <th:block th:if="${session.loginId != null && session.loginId == boardDetail.createAccountId}">
+            <div class="btn-wrapper">
                 <button type="button" onclick="editPage()">수정</button>
                 <button type="button" onclick="deleteBoard()">삭제</button>
+            </div>
+        </th:block>
+    </form>
+    <br>
+
+    <div class="comment-wrapper">
+
+        <th:block th:if="${session.loginId != null}">
+            <div class="comment-write-box">
+                <h4>댓글 작성</h4>
+                <div class="comment-grade" style="margin-bottom: 10px">
+                    <label for="grade">평점</label>
+                    <input type="number" name="grade" id="grade" required>
                 </div>
-            </th:block>
-        </form>
-        <br>
-        <button onclick="location.href='/boards'">목록</button>
+                <textarea name="comments" id="comments" cols="30" rows="3"></textarea>
+            </div>
+            <div>
+                <button onclick="enrollComment()">댓글등록</button>
+            </div>
+
+        </th:block>
+        <div class="comment-list-box">
+            <ul>
+                <li style="margin-bottom: 10px">
+                    <h5 style="margin-bottom: 5px">댓글 작성자</h5>
+                    <div class="grade" style="margin-bottom: 5px">
+                        <span>평점</span>
+                    </div>
+                    <div class="comment">
+                        <span>댓글1</span>
+                    </div>
+                </li>
+            </ul>
+        </div>
+
     </div>
+
+    <button onclick="location.href='/boards'">목록</button>
+</div>
 
 </body>
 
 <script th:inline="javascript">
     var boardDetail = [[${boardDetail}]];
     var boardIdx = boardDetail == null ? null : boardDetail.idx;
+    var loginId = [[${session.loginId}]];
 
     //alert(boardIdx);
-    function editPage() {
-    var url = "/boards/"+boardIdx+"/edit";
-    location.href = url;
+
+    function enrollComment() {
+        var grade = document.querySelector("#grade").value;
+        var comments = document.querySelector("#comments").value;
+
+        console.log(loginId);
+        console.log(grade);
+        console.log(comments);
+
+        if (loginId == null) {
+            alert("잘못된 접근 입니다.");
+            return;
+        }
+        if (grade == null || grade == "") {
+            alert("평점을 입력해주세요.");
+            return;
+        }
+        if (comments == null || comments == '') {
+            alert("댓글을 입력해주세요");
+            return;
+        }
+
+        var requestBody = new Object();
+        requestBody.boardIdx = boardIdx;
+        requestBody.comments = comments;
+        requestBody.grade = grade;
+        requestBody.createAccountId = loginId;
+        requestBody.modifyAccoutId = loginId;
+
+        console.log(requestBody);
+
+        var strRequestBody = JSON.stringify(requestBody);
+        console.log(strRequestBody);
+
+        var url = "/comments";
+        $.ajax({
+            url: url,
+            method: "POST",
+            contentType: "application/json",
+            data: strRequestBody,
+            timeout: 5000,
+            success: function (data) {
+                alert(data);
+            },
+            error: function (xhr, responseTest) {
+                alert(responseTest);
+            }
+        })
     }
-    function deleteBoard(){
-        if(!confirm("게시글을 삭제하시겠습니까?")){
+
+    function editPage() {
+        var url = "/boards/" + boardIdx + "/edit";
+        location.href = url;
+    }
+
+    function deleteBoard() {
+        if (!confirm("게시글을 삭제하시겠습니까?")) {
             return false;
         }
-        var url = "/boards/"+boardIdx+"/delete";
+        var url = "/boards/" + boardIdx + "/delete";
 
         $.ajax({
-        url:url,
-        method: "DELETE",
-        timeout: 5000,
-        success : function (){
-            alert("삭제되었습니다.");
-            location.href = "/boards";
-        },
-        error : function (a,b){
-            console.log(a);
-        }
+            url: url,
+            method: "DELETE",
+            timeout: 5000,
+            success: function () {
+                alert("삭제되었습니다.");
+                location.href = "/boards";
+            },
+            error: function (a, b) {
+                console.log(a);
+            }
         });
     }
 </script>
