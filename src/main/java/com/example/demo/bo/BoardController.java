@@ -11,10 +11,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
@@ -56,11 +53,23 @@ public class BoardController {
     @GetMapping("/boards/{boardIdx}/detail")
     public String boardDetailPage(@PathVariable int boardIdx, Model model){
         boardService.increaseViews(boardIdx);
-
+        System.out.println("조회수 상승에서 idx값 :"+boardIdx);
         BoardDetailDto boardDetail = boardService.getBoardDetail(boardIdx);
 
 
         model.addAttribute("boardDetail",boardDetail);
         return "board/board-detail";
+    }
+    @GetMapping("/boards/{boardIdx}/edit")
+    public String boardUpdatePage(@PathVariable int boardIdx,Model model){
+        BoardDetailDto boardDetail = boardService.getBoardDetail(boardIdx);
+        model.addAttribute("boardDetail", boardDetail);
+        return "board/board-edit";
+    }
+    @PostMapping("/boards/update")
+    public String boardUpdate(@ModelAttribute BoardDetailDto boardDetailDto){
+        System.out.println(boardDetailDto);
+        boardService.boardUpdate(boardDetailDto);
+        return "redirect:/boards";
     }
 }

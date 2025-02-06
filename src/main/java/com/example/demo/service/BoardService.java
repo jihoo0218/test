@@ -30,4 +30,8 @@ public class BoardService {
     public BoardDetailDto getBoardDetail(int boardIdx) {
         return boardMapper.getBoardDetail(boardIdx);
     }
+
+    public void boardUpdate(BoardDetailDto boardDetailDto) {
+        boardMapper.boardUpdate(boardDetailDto);
+    }
 }

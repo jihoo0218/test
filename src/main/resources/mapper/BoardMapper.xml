@@ -3,22 +3,32 @@
         "Http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
 <mapper namespace="com.example.demo.mapper.BoardMapper">
-
+<!--게시글 작성 쿼리-->
     <insert id="saveBoard" parameterType="BoardVO">
-        INSERT INTO enroll_test.board(title, contents, create_account_id, modify_account_id, "createAt")
-        VALUES (#{title}, #{contents}, #{createAccountId}, #{modifyAccountId}, CURRENT_TIMESTAMP)
+        INSERT INTO enroll_test.board(title, contents,views, create_account_id, modify_account_id, "createAt")
+        VALUES (#{title}, #{contents},0, #{createAccountId}, #{modifyAccountId}, CURRENT_TIMESTAMP)
     </insert>
 
+    <!--게시글 불러오는 쿼리-->
     <select id="getBoardList" resultType="com.example.demo.dto.BoardListDto">
         select idx, title, views, "createAt" As "createdAt", create_account_id As "createAccountId" From enroll_test.board
     </select>
+    <!--게시글 불러올때 조회수 증가 쿼리-->
     <update id="increaseViews" parameterType="int">
         update enroll_test.board
         set views = views + 1
         where idx = #{boardIdx}
     </update>
+    <!--게시글 상세페이지 불러오는 쿼리-->
     <select id="getBoardDetail" parameterType="int" resultType="com.example.demo.dto.BoardDetailDto">
         select idx, title, contents, views, "createAt" As"createdAt",create_account_id As "createAccountId"
         From enroll_test.board where idx = #{boardIdx}
     </select>
+    <!--게시글 수정하는 쿼리-->
+    <update id="boardUpdate" parameterType="com.example.demo.dto.BoardDetailDto">
+        update enroll_test.board
+        set title = #{title}, contents = #{contents}, "modifyAt" = now()
+        where idx = #{idx}
+
+    </update>
 </mapper>
