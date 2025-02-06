@@ -37,9 +37,12 @@ public class AccountService {
             throw new IllegalStateException("일치하는 정보가 없습니다");
         }
         HttpSession session = request.getSession();
-        System.out.println(session);
+        System.out.println("session : "+session);
         String loginName = joinedAccount.get("name");
-        System.out.println(loginName);
+        String loginId = joinedAccount.get("id");
+        System.out.println("로그인 이름 : "+loginName);
+        System.out.println("로그인 아이디 : "+loginId);
         session.setAttribute("loginName", loginName);
+        session.setAttribute("loginId", loginId);
     }
 }

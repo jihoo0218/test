@@ -2,25 +2,26 @@
 <html xmlns:th="http://thymeleaf.org">
 <head>
     <meta charset="UTF-8">
-    <title>실험용</title>
+    <title>INDEX</title>
 </head>
 <body>
     <th:block th:if="${session.loginName !=null}">
         <h1>INDEX PAGE - [[${session.loginName}]]님 로그인</h1>
+        <br>
+        <a href="/logout">로그아웃</a>
+        <br>
     </th:block>
 
     <th:block th:if="${session.loginName == null}">
-        <h1>INDEX PAGE 로그인 필요</h1>
+        <h1>INDEX PAGE</h1>
+        <h4>
+            <a href="/join">회원가입 페이지</a>
+        </h4>
+        <br>
+        <a href="/login">로그인 페이지</a>
+        <br>
     </th:block>
-    <h4>
-        <a href="/join">회원가입 페이지</a>
-    </h4>
-    <br>
-    <a href="/login">로그인 페이지</a>
-    <br>
-    <br>
-    <a href="/logout">로그아웃</a>
-    <br>
+
     <br>
     <a href="/boards">게시글 페이지</a>
 </body>
