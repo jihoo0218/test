@@ -29,6 +29,7 @@
 <head>
     <meta charset="UTF-8">
     <title>게시판</title>
+    <script src="https://code.jquery.com/jquery-3.7.1.js" integrity="sha256-eKhayi8LEQwp4NKxN+CfCh+3qOVUtJn3QNZ0TciWLP4=" crossorigin="anonymous"></script>
 </head>
 <body>
 <div class="container">
@@ -66,4 +67,51 @@
     </div>
 </div>
 </body>
+<script>
+    window.onload = function (){
+        renderingBoards();
+    }
+    function renderingBoards(){
+
+        let url = "/boards/list";
+
+        $.ajax({
+            url : url,
+            method: "GET",
+            timeout: 5000,
+            contentType : "application/json",
+            success: function (data, a, b){
+                console.log(a);
+                console.log(b);
+
+                _cb_renderingBoard(data);
+            },
+            error: function (a, b){
+                console.log(a);
+                console.log(b);
+                alert("에러");
+            }
+        });
+    }
+    function _cb_renderingBoard(data){
+        var tbody = document.querySelector(".board-table tbody")
+
+        tbody.innerHTML = "";
+
+        var html ="";
+
+        for (var i = 0; i<data.length;i++){
+            html+= "<tr>";
+            html+= "<td>" + data[i].idx + "</td>";
+            html+= "<td>" + data[i].title + "</td>";
+            html+= "<td>" + data[i].views + "</td>";
+            html+= "<td>" + data[i].createAccountId + "</td>";
+            html+= "<td>" + data[i].createdAt + "</td>";
+            html+= "</tr>";
+
+        }
+        tbody.innerHTML = html;
+
+    }
+</script>
 </html>

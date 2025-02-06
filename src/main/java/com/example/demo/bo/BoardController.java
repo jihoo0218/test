@@ -1,13 +1,19 @@
 package com.example.demo.bo;
 
+import com.example.demo.dto.BoardListDto;
 import com.example.demo.service.BoardService;
 import com.example.demo.vo.BoardVO;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpSession;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.ResponseBody;
+
+import java.util.List;
 
 @Controller
 public class BoardController {
@@ -36,5 +42,12 @@ public class BoardController {
         boardService.saveBoard(boardVO);
 
         return "redirect:/boards";
+    }
+    @GetMapping("/boards/list")
+    @ResponseBody
+    public ResponseEntity<List<BoardListDto>> getBoardList(){
+        List<BoardListDto> boardList = boardService.getBoardList();
+
+        return ResponseEntity.status(HttpStatus.OK).body(boardList);
     }
 }

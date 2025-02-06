@@ -9,4 +9,8 @@
         VALUES (#{title}, #{contents}, #{createAccountId}, #{modifyAccountId}, CURRENT_TIMESTAMP)
     </insert>
 
+    <select id="getBoardList" resultType="com.example.demo.dto.BoardListDto">
+        select idx, title, views, "createAt" As "createdAt", create_account_id As "createAccountId" From enroll_test.board
+    </select>
+
 </mapper>
