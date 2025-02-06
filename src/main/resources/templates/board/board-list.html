@@ -103,7 +103,7 @@
         for (var i = 0; i<data.length;i++){
             html+= "<tr>";
             html+= "<td>" + data[i].idx + "</td>";
-            html+= "<td>" + data[i].title + "</td>";
+            html+= "<td><a href='/boards/"+data[i].idx+"/detail'>"+ data[i].title+ "</a></td>";
             html+= "<td>" + data[i].views + "</td>";
             html+= "<td>" + data[i].createAccountId + "</td>";
             html+= "<td>" + data[i].createdAt + "</td>";

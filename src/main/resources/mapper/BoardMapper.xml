@@ -12,5 +12,13 @@
     <select id="getBoardList" resultType="com.example.demo.dto.BoardListDto">
         select idx, title, views, "createAt" As "createdAt", create_account_id As "createAccountId" From enroll_test.board
     </select>
-
+    <update id="increaseViews" parameterType="int">
+        update enroll_test.board
+        set views = views + 1
+        where idx = #{boardIdx}
+    </update>
+    <select id="getBoardDetail" parameterType="int" resultType="com.example.demo.dto.BoardDetailDto">
+        select idx, title, contents, views, "createAt" As"createdAt",create_account_id As "createAccountId"
+        From enroll_test.board where idx = #{boardIdx}
+    </select>
 </mapper>
