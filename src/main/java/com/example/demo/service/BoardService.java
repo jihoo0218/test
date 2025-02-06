@@ -34,4 +34,8 @@ public class BoardService {
     public void boardUpdate(BoardDetailDto boardDetailDto) {
         boardMapper.boardUpdate(boardDetailDto);
     }
+
+    public void boardDelete(int boardIdx) {
+        boardMapper.boardDelete(boardIdx);
+    }
 }

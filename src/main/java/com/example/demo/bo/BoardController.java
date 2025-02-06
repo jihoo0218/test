@@ -83,6 +83,15 @@ public class BoardController {
         return "redirect:/boards";
     }
 
+    @DeleteMapping("/boards/{boardIdx}/delete")
+    public ResponseEntity<String> boardDelete(@PathVariable int boardIdx, HttpServletRequest request) {
+        if (!authorized(boardIdx, request)) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("잘못된 접근입니다.");
+        }
+        boardService.boardDelete(boardIdx);
+        return ResponseEntity.status(HttpStatus.OK).body(boardIdx + "번 게시글이 삭제되었습니다.");
+    }
+
     private boolean authorized(int boardIdx, HttpServletRequest request) {
         BoardDetailDto boardDetail = boardService.getBoardDetail(boardIdx);
         String creatAccountId = boardDetail.getCreateAccountId();
