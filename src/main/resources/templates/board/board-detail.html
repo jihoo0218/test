@@ -132,7 +132,7 @@
         requestBody.comments = comments;
         requestBody.grade = grade;
         requestBody.createAccountId = loginId;
-        requestBody.modifyAccoutId = loginId;
+        requestBody.modifyAccountId = loginId;
 
         console.log(requestBody);
 
@@ -148,6 +148,8 @@
             timeout: 5000,
             success: function (data) {
                 alert(data);
+                document.querySelector("#grade").value="";
+                document.querySelector("#comments").value="";
             },
             error: function (xhr, responseTest) {
                 alert(responseTest);
