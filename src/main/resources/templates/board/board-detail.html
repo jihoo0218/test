@@ -105,6 +105,42 @@
     var loginId = [[${session.loginId}]];
 
     //alert(boardIdx);
+    window.onload = function (){
+        getComments();
+    }
+    function getComments(){
+        var url = "/boards/"+boardIdx+"/comments";
+
+        $.ajax({
+        url: url,
+        method: "GET",
+        timeout: 5000,
+        success: function (data){
+            _cb_getComments(data);
+        },
+        error: function (xhr, responseText){
+            alert(responseText)
+        }
+        })
+    }
+    function _cb_getComments(data){
+        console.log(data);
+
+        var commentUl = document.querySelector(".comment-list-box ul");
+
+        commentUl.innerHTML = "";
+
+        var html ="";
+
+        for(var i = 0; i<data.length;i++){
+            html += "<li style='margin-bottom:10px;'>";
+            html += "<h5 style='margin-bottom:5px;'>작성자 : "+ data[i].createAccountId + "</h5>";
+            html += "<div class = 'grade' style ='margin-bottom:5px;'><span>평점 : "+data[i].grade+ "점</span></div>";
+            html += "<div class = 'comment'><span>"+data[i].comments+"</span></div>";
+            html += "</li>";
+        }
+        commentUl.innerHTML = html;
+    }
 
     function enrollComment() {
         var grade = document.querySelector("#grade").value;
@@ -150,6 +186,7 @@
                 alert(data);
                 document.querySelector("#grade").value="";
                 document.querySelector("#comments").value="";
+                getComments();
             },
             error: function (xhr, responseTest) {
                 alert(responseTest);

@@ -1,5 +1,6 @@
 package com.example.demo.bo;
 
+import com.example.demo.dto.CommentsDto;
 import org.springframework.ui.Model;
 import com.example.demo.dto.BoardDetailDto;
 import com.example.demo.dto.BoardListDto;
@@ -83,6 +84,14 @@ public class BoardController {
         return "redirect:/boards";
     }
 
+    @GetMapping("/boards/{boardIdx}/comments")
+    public ResponseEntity<List<CommentsDto>> getComments(@PathVariable int boardIdx) {
+
+        List<CommentsDto> commentsList = boardService.getComments(boardIdx);
+
+        return ResponseEntity.status(HttpStatus.OK).body(commentsList);
+    }
+
     @DeleteMapping("/boards/{boardIdx}/delete")
     public ResponseEntity<String> boardDelete(@PathVariable int boardIdx, HttpServletRequest request) {
         if (!authorized(boardIdx, request)) {
@@ -94,11 +103,11 @@ public class BoardController {
 
     private boolean authorized(int boardIdx, HttpServletRequest request) {
         BoardDetailDto boardDetail = boardService.getBoardDetail(boardIdx);
-        String creatAccountId = boardDetail.getCreateAccountId();
+        String createAccountId = boardDetail.getCreateAccountId();
 
         Object loginId = request.getSession().getAttribute("loginId");
 
-        if (loginId == null || !creatAccountId.equals(loginId.toString())) {
+        if (loginId == null || !createAccountId.equals(loginId.toString())) {
             return false;
         }
         return true;

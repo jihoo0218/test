@@ -35,4 +35,10 @@
     <delete id="boardDelete" parameterType="int">
         delete From enroll_test.board where idx = #{boardIdx}
     </delete>
+    <!--게시글 댓글 조회하는 쿼리-->
+    <select id="getComments" parameterType="int" resultType="com.example.demo.dto.CommentsDto">
+        Select idx, grade, comments, create_account_id AS "createAccountId"
+        FROM enroll_test.comments where board_idx = #{boardIdx}
+        ORDER By create_at DESC
+    </select>
 </mapper>
