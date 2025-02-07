@@ -10,9 +10,25 @@
     </insert>
 
     <!--게시글 불러오는 쿼리-->
-    <select id="getBoardList" resultType="com.example.demo.dto.BoardListDto">
-        select idx, title, views, "createAt" As "createdAt", create_account_id As "createAccountId" From
-        enroll_test.board
+    <!--  <select id="getBoardList" resultType="com.example.demo.dto.BoardListDto">
+          select idx, title, views, "createAt" As "createdAt", create_account_id As "createAccountId" From
+          enroll_test.board
+      </select>-->
+    <select id="getBoardList" resultType="com.example.demo.dto.BoardListDto" parameterType="map">
+        select
+        b.idx,
+        b.title,
+        b.views,
+        COALESCE(c.avg,0) AS avg,
+        COALESCE(c.count,0) AS count,
+        b.create_account_id,
+        b."createAt" AS createdAt
+        From enroll_test.board b
+        LEFT JOIN(
+        select board_idx, AVG(grade), COUNT(board_idx)
+        From enroll_test.comments Group By board_idx) c
+        on b.idx = c.board_idx
+        ORDER BY ${order} DESC
     </select>
     <!--게시글 불러올때 조회수 증가 쿼리-->
     <update id="increaseViews" parameterType="int">
@@ -41,4 +57,6 @@
         FROM enroll_test.comments where board_idx = #{boardIdx}
         ORDER By create_at DESC
     </select>
+
+
 </mapper>

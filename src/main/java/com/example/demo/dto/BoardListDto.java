@@ -11,6 +11,25 @@ public class BoardListDto {
     private int views;
     private LocalDateTime createdAt;
     private String createAccountId;
+    private double avg;
+    private int count;
+
+
+    public double getAvg() {
+        return avg;
+    }
+
+    public void setAvg(double avg) {
+        this.avg = avg;
+    }
+
+    public int getCount() {
+        return count;
+    }
+
+    public void setCount(int count) {
+        this.count = count;
+    }
 
     public int getIdx() {
         return idx;
@@ -40,8 +59,8 @@ public class BoardListDto {
         return createdAt;
     }
 
-    public void setCreatedAt(LocalDateTime createdAt) {
-        this.createdAt = createdAt;
+    public void setCreatedAt(LocalDateTime createAt) {
+        this.createdAt = createAt;
     }
 
     public String getCreateAccountId() {

@@ -35,21 +35,28 @@
 <body>
 <div class="container">
     <h1>게시글 보기</h1>
-    <th:block th:if="${session.loginName != null}">
 
         <div class="option-group">
+            <select id="order">
+            <option value="createdAt">최신순</option>
+            <option value="avg">평점순</option>
+            <option value="count">댓글순</option>
+            <option value="views">조회순</option>
+            </select>
+            <th:block th:if="${session.loginName != null}">
             <button onclick="location.href='/boards/write'">게시글 쓰기</button>
-            <br>
-            <br>
-
+                        <br>
+                        <br>
+            </th:block>
         </div>
-    </th:block>
     <button onclick="location.href='/'">홈으로</button>
     <div class="table-container">
         <table class="board-table">
             <colgroup>
                 <col width="5%"/>
                 <col width="60%"/>
+                <col width="10%"/>
+                <col width="10%"/>
                 <col width="10%"/>
                 <col width="10%"/>
                 <col width="20%"/>
@@ -59,6 +66,8 @@
                 <th>순번</th>
                 <th>게시글 제목</th>
                 <th>조회수</th>
+                <th>평점</th>
+                <th>댓글수</th>
                 <th>작성자</th>
                 <th>생성일</th>
             </tr>
@@ -71,11 +80,30 @@
 <script>
     window.onload = function () {
         renderingBoards();
-    }
 
+        addEventOnSelectBox();
+    }
+    function addEventOnSelectBox() {
+
+        var orderSelectBox = document.querySelector("#order");
+
+        orderSelectBox.addEventListener("change", function(e){
+            console.log(e.target.value);
+
+            var order = e.target.value;
+
+            renderingBoards(order);
+        });
+
+    }
     function renderingBoards() {
 
         let url = "/boards/list";
+
+        if(arguments[0] != null){
+            url += "?order=" +arguments[0];
+        }
+
 
         $.ajax({
             url: url,
@@ -104,10 +132,13 @@
         var html = "";
 
         for (var i = 0; i < data.length; i++) {
+            console.log(data[i].createdAt);
             html += "<tr>";
             html += "<td>" + data[i].idx + "</td>";
             html += "<td><a href='/boards/" + data[i].idx + "/detail'>" + data[i].title + "</a></td>";
             html += "<td>" + data[i].views + "</td>";
+            html += "<td>" + data[i].avg + "</td>";
+            html += "<td>" + data[i].count + "</td>";
             html += "<td>" + data[i].createAccountId + "</td>";
             html += "<td>" + data[i].createdAt + "</td>";
             html += "</tr>";

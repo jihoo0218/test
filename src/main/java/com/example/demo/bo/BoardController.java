@@ -1,6 +1,7 @@
 package com.example.demo.bo;
 
 import com.example.demo.dto.CommentsDto;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.ui.Model;
 import com.example.demo.dto.BoardDetailDto;
 import com.example.demo.dto.BoardListDto;
@@ -14,7 +15,9 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Objects;
 
 @Controller
@@ -50,8 +53,12 @@ public class BoardController {
 
     @GetMapping("/boards/list")
     @ResponseBody
-    public ResponseEntity<List<BoardListDto>> getBoardList() {
-        List<BoardListDto> boardList = boardService.getBoardList();
+    public ResponseEntity<List<BoardListDto>> getBoardList(@RequestParam(value = "order", required = false, defaultValue = "createdAt") String order) {
+
+        Map<String, String> parameter = new HashMap<String, String>();
+        parameter.put("order", order);
+
+        List<BoardListDto> boardList = boardService.getBoardList(parameter);
 
         return ResponseEntity.status(HttpStatus.OK).body(boardList);
     }

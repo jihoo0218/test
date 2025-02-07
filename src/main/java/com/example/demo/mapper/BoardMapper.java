@@ -7,12 +7,13 @@ import com.example.demo.vo.BoardVO;
 import org.apache.ibatis.annotations.Mapper;
 
 import java.util.List;
+import java.util.Map;
 
 @Mapper
 public interface BoardMapper {
     void saveBoard(BoardVO boardVO);
 
-    List<BoardListDto> getBoardList();
+    List<BoardListDto> getBoardList(Map<String, String> parameter);
 
     void increaseViews(int boardIdx);
 

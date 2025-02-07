@@ -9,6 +9,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Map;
 
 @Service
 public class BoardService {
@@ -20,8 +21,8 @@ public class BoardService {
         boardMapper.saveBoard(boardVO);
     }
 
-    public List<BoardListDto> getBoardList() {
-        return boardMapper.getBoardList();
+    public List<BoardListDto> getBoardList(Map<String, String> parameter) {
+        return boardMapper.getBoardList(parameter);
     }
 
     public void increaseViews(int boardIdx) {
